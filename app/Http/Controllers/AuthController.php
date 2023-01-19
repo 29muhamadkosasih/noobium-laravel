@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\SignUpRequest;
+use App\Http\Requests\Auth\SignInRequest;
 use App\Models\User;
 class AuthController extends Controller
 {
@@ -36,6 +37,83 @@ class AuthController extends Controller
                 'message'   =>'User created succesfully.'
             ],
             'data'  => [
+                'user' =>[
+                    'name' =>$user->name,
+                    'email' =>$user->email,
+                    'picture' =>$user->picture,
+                ],
+                'access_token' => [
+                    'token' =>$token,
+                    'type' =>'Bearer',
+                    'expires_in' =>strtotime('+' . auth()->factory()->getTTL() . 'minutes'),
+                ]
+            ],
+        ]);
+    }
+
+    public function signIn(SignInRequest $request)
+    {
+        $token = auth()->attempt($request->all());
+
+        if (!$token)
+        {
+            return response()->json([
+                'meta' => [
+                    'code' => 401,
+                    'status' => 'error',
+                    'message' => 'incorrect email or password',
+                ],
+                'data' => [],
+            ],401);
+        }
+        $user = auth()->user();
+        // dd($user);
+        return response()->json([
+            'meta' => [
+                'code' => 200,
+                'status' =>'success',
+                'message' => 'Signed in successfully',
+            ],
+            'data'  => [
+                'user' =>[
+                    'name' =>$user->name,
+                    'email' =>$user->email,
+                    'picture' =>$user->picture,
+                ],
+                'access_token' => [
+                    'token' =>$token,
+                    'type' =>'Bearer',
+                    'expires_in' =>strtotime('+' . auth()->factory()->getTTL() . 'minutes'),
+                ]
+            ],
+        ]);
+    }
+
+    public function signOut()
+    {
+        auth()->logout();
+
+        return response()->json([
+            'meta' => [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Sign Out Successfully',
+            ],
+            'data' => [],
+        ]);
+    }
+
+    public function refresh()
+    {
+        $user = auth()->user();
+        $token = auth()->fromUser($user);
+        return response()->json([
+            'meta' => [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'toKen Successfully',
+            ],
+            'data' => [
                 'user' =>[
                     'name' =>$user->name,
                     'email' =>$user->email,
