@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Me\Profile;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ErrorResponseJson;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SignInRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     use ErrorResponseJson;
 
@@ -27,8 +27,8 @@ class SignInRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|email:rfc,dns',
-            'password' => 'required|string',
+            'name' => 'required|string|min:2|max:190',
+            'picture' => 'nullable|image|mimes:jpg,jpeg,bmp,png',
         ];
     }
 }
