@@ -5,10 +5,9 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ErrorResponseJson;
 
-class SignInRequest extends FormRequest
+class SignUpRequest extends FormRequest
 {
     use ErrorResponseJson;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,8 +26,9 @@ class SignInRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|email:rfc,dns',
-            'password' => 'required|string',
+            'name' =>'required|string|min:2|max:190',
+            'email' =>'required|string|email:dns|max:190',
+            'password' =>'required|string|min:6|max:190'
         ];
     }
 }
