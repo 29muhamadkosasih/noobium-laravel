@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Me\ProfileController;
 use App\Http\Controllers\Me\ArticleController as MeArticleController;
 
@@ -17,6 +19,15 @@ use App\Http\Controllers\Me\ArticleController as MeArticleController;
 */
 Route::post('/sign-up', [AuthController::class, 'signUp']);
 Route::post('/sign-in', [AuthController::class, 'signIn']);
+
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{categorySlug}', [CategoryController::class, 'show']);
+
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{slug}', [ArticleController::class, 'show']);
+
+
+
 
 Route::middleware('auth:api')->group(function () {
 
